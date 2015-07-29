@@ -103,7 +103,7 @@ parse_latex <- function(
   git_branch = "master", #
   text_height = 20, # Height of LaTeX rendered, passed ot \code{insert_string}
   insert_string =
-    paste0('<img src="%s%s" alt="Equation not rendered" height="',
+    paste0('\n<img src="%s%s" alt="Equation not rendered" height="',
            text_height, '">\n'),
   # String of HTML to put in LaTeX figure.  Must have 2 %s for sprintf
   raw_git_site = "https://rawgit.com"

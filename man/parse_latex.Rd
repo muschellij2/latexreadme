@@ -7,8 +7,8 @@
 parse_latex(rmd, new_md, git_username = "muschellij2",
   git_reponame = "Github_Markdown_LaTeX", git_branch = "master",
   text_height = 20,
-  insert_string = paste0("\\n<img src=\\"\%s\%s\\" alt=\\"Equation not
-  rendered\\" height=\\"", text_height, "\\">\\n"),
+  insert_string = paste0("\\n<img src=\\"\%s\%s\\" alt=\\"Equation
+  Fail\\" height=\\"", text_height, "\\">\\n"),
   raw_git_site = "https://rawgit.com", bad_string = "ZZZZZZZZZZZZZZZ")
 }
 \arguments{

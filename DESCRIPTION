@@ -1,0 +1,15 @@
+Package: latexreadme
+Type: Package
+Title: Parses Markdown Files for GitHub with LaTeX Equations
+Version: 0.1
+Date: 2015-07-29
+Author: John Muschelli
+Maintainer: John Muschelli <muschellij2@gmail.com>
+Description: This package takes LaTeX inline and regular equations marked with dollar
+  signs and makes PNGs of them to embed in README files for GitHub pages.
+Imports:
+  animation,
+  stringr,
+  knitr
+License: GPL-2
+LazyData: TRUE

@@ -78,6 +78,7 @@ png_latex <- function(
 #' @param raw_git_site Site where to reference figure.
 #' \code{img_prefix = file.path(raw_git_site git_username git_reponame git_branch)}.
 #' Must reference the figures directly with proper content-type headers
+#' @param bad_string String to sub in for dollar signs temporarily (not need to be changed)
 #' @export
 #' @import knitr
 #' @import stringr
@@ -95,6 +96,15 @@ png_latex <- function(
 #' library(knitr)
 #' new_html = pandoc(new_md, format = "html")
 #' browseURL(new_html)
+#'
+#' new_md = file.path(tempdir(), "README.md")
+#' parse_latex(rmd,
+#'             new_md,
+#'             git_username = "muschellij2",
+#'             git_reponame = "Github_Markdown_LaTeX")
+#' library(knitr)
+#' new_html = pandoc(new_md, format = "html")
+#' browseURL(new_html)#'
 parse_latex <- function(
   rmd, # Rmd or md file that needs to be parsed
   new_md, # Output md file (usually named README.md for gitHub)
@@ -106,9 +116,10 @@ parse_latex <- function(
     paste0('\n<img src="%s%s" alt="Equation not rendered" height="',
            text_height, '">\n'),
   # String of HTML to put in LaTeX figure.  Must have 2 %s for sprintf
-  raw_git_site = "https://rawgit.com"
+  raw_git_site = "https://rawgit.com",
   # Site where to reference figure.  \code{img_prefix = file.path(raw_git_site, git_username, git_reponame, git_branch)}.
   #Must reference the figures directly with proper content-type headers
+  bad_string = "ZZZZZZZZZZZZZZZ"
 ){
 
   img_prefix = file.path(raw_git_site,
@@ -128,8 +139,6 @@ parse_latex <- function(
     file.copy(from = rmd, to = tfile)
   }
   xmd = md = readLines(tfile)
-
-  bad_string = "ZZZZZZZZZZZZZZZ"
 
   md = paste(md, collapse = "\n")
   double_latex = gsub("\\$\\$(.+?)\\$\\$",
@@ -162,6 +171,9 @@ parse_latex <- function(
   }
 
   md = xmd
+  ########################
+  # Find Code and Remove
+  ########################
   start_ticks = grep("^```", md)
   rm.ind = NULL
   if (length(start_ticks) > 0){
@@ -170,9 +182,13 @@ parse_latex <- function(
       seq(x[1], x[2])
     }))
   }
+  if (length(rm.ind) > 0 ){
+    md = md[-rm.ind]
+  }
 
-  # rm_vals = md[rm.ind]
-  md = md[-rm.ind]
+  ########################
+  # Replace single dollar sign inline equations
+  ########################
   double_latex = gsub("\\$(.+?)\\$", paste0(bad_string, "$\\1$", bad_string),
                       md)
   double_latex = strsplit(double_latex, bad_string)
@@ -195,6 +211,24 @@ parse_latex <- function(
     }, outfiles, filenames)
 
     md = xmd
+    ########################
+    # Find Code and sub out the dollar signs for bad_string
+    ########################
+    start_ticks = grep("^```", md)
+    rm.ind = NULL
+    if (length(start_ticks) > 0){
+      start_ticks = matrix(start_ticks, ncol = 2, byrow = TRUE)
+      rm.ind = unlist(apply(start_ticks, 1, function(x){
+        seq(x[1], x[2])
+      }))
+    }
+    if (length(rm.ind) > 0 ){
+      md[rm.ind] = gsub("\\$", bad_string, md[rm.ind])
+    }
+
+    ########################
+    # Loop through and put in HTML
+    ########################
     md = paste(md, collapse = "\n")
     new_str = sprintf(insert_string, img_prefix,
                       basename(filenames))
@@ -203,6 +237,11 @@ parse_latex <- function(
                new_str[istr],
                md)
     }
+
+    ########################
+    # Put back dollar signs for bad_string
+    ########################
+    md = gsub(bad_string, "$", md)
 
     writeLines(md, con = tfile)
     xmd = readLines(tfile)

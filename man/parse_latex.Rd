@@ -9,7 +9,7 @@ parse_latex(rmd, new_md, git_username = "muschellij2",
   text_height = 20,
   insert_string = paste0("\\n<img src=\\"\%s\%s\\" alt=\\"Equation not
   rendered\\" height=\\"", text_height, "\\">\\n"),
-  raw_git_site = "https://rawgit.com")
+  raw_git_site = "https://rawgit.com", bad_string = "ZZZZZZZZZZZZZZZ")
 }
 \arguments{
 \item{rmd}{Rmd or md file that needs to be parsed}
@@ -29,6 +29,8 @@ parse_latex(rmd, new_md, git_username = "muschellij2",
 \item{raw_git_site}{Site where to reference figure.
 \code{img_prefix = file.path(raw_git_site git_username git_reponame git_branch)}.
 Must reference the figures directly with proper content-type headers}
+
+\item{bad_string}{String to sub in for dollar signs temporarily (not need to be changed)}
 }
 \value{
 Filename of parsed MD file
@@ -51,5 +53,14 @@ parse_latex(rmd,
 library(knitr)
 new_html = pandoc(new_md, format = "html")
 browseURL(new_html)
+
+new_md = file.path(tempdir(), "README.md")
+parse_latex(rmd,
+            new_md,
+            git_username = "muschellij2",
+            git_reponame = "Github_Markdown_LaTeX")
+library(knitr)
+new_html = pandoc(new_md, format = "html")
+browseURL(new_html)#'
 }
 

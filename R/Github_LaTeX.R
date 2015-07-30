@@ -108,8 +108,8 @@ png_latex <- function(
 parse_latex <- function(
   rmd, # Rmd or md file that needs to be parsed
   new_md, # Output md file (usually named README.md for gitHub)
-  git_username = "muschellij2", # GitHub username
-  git_reponame = "Github_Markdown_LaTeX", #
+  git_username = NULL, # GitHub username
+  git_reponame = NULL, #
   git_branch = "master", #
   text_height = 20, # Height of LaTeX rendered, passed ot \code{insert_string}
   insert_string =
@@ -124,6 +124,12 @@ parse_latex <- function(
   bad_string = "ZZZZZZZZZZZZZZZ"
 ){
 
+  if (is.null(git_username)){
+    stop("Git Username must be specified")
+  }
+  if (is.null(git_reponame)){
+    stop("Git Repository name must be specified")
+  }
   img_prefix = file.path(raw_git_site,
                          git_username,
                          git_reponame,

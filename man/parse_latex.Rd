@@ -4,10 +4,10 @@
 \alias{parse_latex}
 \title{Parse LaTeX for Markdown}
 \usage{
-parse_latex(rmd, new_md, git_username = "muschellij2",
-  git_reponame = "Github_Markdown_LaTeX", git_branch = "master",
-  text_height = 20, insert_string = paste0("\\n<img src=\\"\%s\%s\\" ",
-  "alt=\\"Equation Fail\\"", "height=\\"", text_height, "\\">\\n"),
+parse_latex(rmd, new_md, git_username = NULL, git_reponame = NULL,
+  git_branch = "master", text_height = 20,
+  insert_string = paste0("\\n<img src=\\"\%s\%s\\" ", "alt=\\"Equation
+  Fail\\"", "height=\\"", text_height, "\\">\\n"),
   raw_git_site = "https://rawgit.com", bad_string = "ZZZZZZZZZZZZZZZ")
 }
 \arguments{

@@ -4,12 +4,14 @@
 \alias{png_latex}
 \title{Creates a PNG of LaTeX Equation}
 \usage{
-png_latex(latex, packages = c("amsmath", "amsfonts", "amssymb"))
+png_latex(latex, packages = c("amsmath", "amsfonts", "amssymb"), ...)
 }
 \arguments{
 \item{latex}{single character string of LaTeX code to convert}
 
 \item{packages}{to be loaded into LaTex using \code{\\usepackage}}
+
+\item{...}{Arguments to be passed to \code{\link{converter}}}
 }
 \value{
 Name of output file as a PNG

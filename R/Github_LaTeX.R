@@ -35,11 +35,13 @@ converter <- function(pdfname, # Name of output PDF.  Pngname will be same name 
 #' creates a PDF of this, crops it, then converts it to a PNG
 #' @param latex single character string of LaTeX code to convert
 #' @param packages to be loaded into LaTex using \code{\\usepackage}
+#' @param ... Arguments to be passed to \code{\link{converter}}
 #' @export
 #' @return Name of output file as a PNG
 png_latex <- function(
   latex, # single character string of LaTeX code to convert
-  packages = c("amsmath", "amsfonts", "amssymb")
+  packages = c("amsmath", "amsfonts", "amssymb"),
+  ...
 ){
   # latex = latexTranslate(latex)
   packages = paste0("\\usepackage{", packages, "}")
@@ -58,7 +60,7 @@ png_latex <- function(
   system(sprintf("pdflatex %s", basename(infile)))
   setwd(cwd)
   plot_crop(outfile)
-  converter(outfile)
+  converter(outfile, ...)
   outfile = paste0(stub, ".png")
   return(outfile)
 }
@@ -79,6 +81,8 @@ png_latex <- function(
 #' \code{img_prefix = file.path(raw_git_site git_username git_reponame git_branch)}.
 #' Must reference the figures directly with proper content-type headers
 #' @param bad_string String to sub in for dollar signs temporarily (not need to be changed)
+#' @param ... Arguments to be passed to \code{\link{png_latex}}, such as LaTeX packages or
+#' a pass through argument to \code{\link{converter}}
 #' @export
 #' @import knitr
 #' @import stringr
@@ -121,7 +125,8 @@ parse_latex <- function(
   raw_git_site = "https://rawgit.com",
   # Site where to reference figure.  \code{img_prefix = file.path(raw_git_site, git_username, git_reponame, git_branch)}.
   #Must reference the figures directly with proper content-type headers
-  bad_string = "ZZZZZZZZZZZZZZZ"
+  bad_string = "ZZZZZZZZZZZZZZZ",
+  ...
 ){
 
   if (is.null(git_username)){
@@ -157,7 +162,7 @@ parse_latex <- function(
 
   eq_no = 0
   if (length(double_latex) > 0){
-    outfiles = sapply(double_latex, png_latex)
+    outfiles = sapply(double_latex, png_latex, ...)
     filenames = sprintf("eq_no_%02.0f.png",
                         seq(eq_no+1, eq_no + length(outfiles)))
     eq_no = eq_no + length(outfiles)
@@ -209,7 +214,7 @@ parse_latex <- function(
   #   })
   #
   if (length(double_latex) > 0){
-    outfiles = sapply(double_latex, png_latex)
+    outfiles = sapply(double_latex, png_latex, ...)
     filenames = sprintf("eq_no_%02.0f.png",
                         seq(eq_no+1, eq_no + length(outfiles)))
     eq_no = eq_no + length(outfiles)

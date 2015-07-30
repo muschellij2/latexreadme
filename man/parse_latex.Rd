@@ -8,7 +8,7 @@ parse_latex(rmd, new_md, git_username = NULL, git_reponame = NULL,
   git_branch = "master", text_height = 20,
   insert_string = paste0("\\n<img src=\\"\%s\%s\\" ", "alt=\\"Equation
   Fail\\"", "height=\\"", text_height, "\\">\\n"),
-  raw_git_site = "https://rawgit.com", bad_string = "ZZZZZZZZZZZZZZZ")
+  raw_git_site = "https://rawgit.com", bad_string = "ZZZZZZZZZZZZZZZ", ...)
 }
 \arguments{
 \item{rmd}{Rmd or md file that needs to be parsed}
@@ -30,6 +30,9 @@ parse_latex(rmd, new_md, git_username = NULL, git_reponame = NULL,
 Must reference the figures directly with proper content-type headers}
 
 \item{bad_string}{String to sub in for dollar signs temporarily (not need to be changed)}
+
+\item{...}{Arguments to be passed to \code{\link{png_latex}}, such as LaTeX packages or
+a pass through argument to \code{\link{converter}}}
 }
 \value{
 Filename of parsed MD file
